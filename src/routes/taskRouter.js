@@ -38,7 +38,7 @@ taskRouter.get('/tasks',auth,async (req,res)=>{
       sort
     }
       try{
-     const tasks= await Task.find({owner:req.user.id,...match},null,options)
+     const tasks= await Task.find({owner:req.user._id,...match},null,options)
         res.send(tasks)
   
       }catch(e){
