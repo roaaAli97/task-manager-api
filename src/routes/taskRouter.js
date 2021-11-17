@@ -32,21 +32,17 @@ taskRouter.get('/tasks',auth,async (req,res)=>{
        const queryParts=req.query.sortBy.split('_')
        sort[queryParts[0]]=queryParts[1]==='desc'?-1:1
      }
+    const options={
+      limit:parseInt(req.query.limit),
+      skip:parseInt(req.query.skip),
+      sort
+    }
       try{
-    //  const tasks= await Task.find({owner:req.user.id})
-    //     res.send(tasks)
-       await req.user.populate({
-         path:'tasks',
-         match,
-         options:{
-           limit:parseInt(req.query.limit),
-           skip:parseInt(req.query.skip),
-           sort
-         }
-       })
-       res.send(req.user.tasks)
+     const tasks= await Task.find({owner:req.user.id,...match},null,options)
+        res.send(tasks)
+  
       }catch(e){
-        res.status(500).send(e)
+        res.status(400).send(e)
     }
 })
 //get task by id
