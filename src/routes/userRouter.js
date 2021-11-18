@@ -43,7 +43,14 @@ userRouter.get("/users/myprofile",auth,async (req,res)=>{
 //update a user  route
 userRouter.patch("/users/me",auth,async (req,res)=>{
     const updates=Object.keys(req.body)
-  
+  const allowedUpdates=['name','age','email','password']
+
+     const validUpdate=updates.every(update=>{
+         return allowedUpdates.includes(update)
+     })
+     if(!validUpdate){
+         return res.status(400).send({'error':'this update is not valid'})
+     }
     try{
     
         updates.forEach((update)=>{
